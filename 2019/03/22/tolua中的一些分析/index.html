@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019/3 | 司马老师的blog</title>
+  <title>tolua中的一些分析 | 司马老师的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="司马老师的blog">
-<meta property="og:url" content="http://yoursite.com/archives/2019/03/index.html">
+  <meta name="description" content="1 toLua 中Vector3:Add() 和 运算符+ 以及逻辑运算1234567891011121314151617181920212223242526272829303132local va = Vector3.zerolocal vb = Vector3.onelocal x1 = os.clock()for i = 1, 100000 do    va = va + vbendloc">
+<meta name="keywords" content="lua">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tolua中的一些分析">
+<meta property="og:url" content="http://yoursite.com/2019/03/22/tolua中的一些分析/index.html">
 <meta property="og:site_name" content="司马老师的blog">
+<meta property="og:description" content="1 toLua 中Vector3:Add() 和 运算符+ 以及逻辑运算1234567891011121314151617181920212223242526272829303132local va = Vector3.zerolocal vb = Vector3.onelocal x1 = os.clock()for i = 1, 100000 do    va = va + vbendloc">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-22T03:44:37.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="司马老师的blog">
+<meta name="twitter:title" content="tolua中的一些分析">
+<meta name="twitter:description" content="1 toLua 中Vector3:Add() 和 运算符+ 以及逻辑运算1234567891011121314151617181920212223242526272829303132local va = Vector3.zerolocal vb = Vector3.onelocal x1 = os.clock()for i = 1, 100000 do    va = va + vbendloc">
   
     <link rel="alternative" href="/atom.xml" title="司马老师的blog" type="application/atom+xml">
   
@@ -148,36 +153,64 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-tolua中的一些分析" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      tolua中的一些分析
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/22/tolua中的一些分析/" class="archive-article-date">
+
+        
+        <a href="/2019/03/22/tolua中的一些分析/" class="archive-article-date">
   	<time datetime="2019-03-22T03:17:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/22/tolua中的一些分析/">tolua中的一些分析</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>1 toLua 中Vector3:Add() 和 运算符+ 以及逻辑运算<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> va = Vector3.zero</span><br><span class="line"><span class="keyword">local</span> vb = Vector3.one</span><br><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">100000</span> <span class="keyword">do</span></span><br><span class="line">    va = va + vb</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"first time "</span>,x2 - x1,<span class="built_in">tostring</span>(va))</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> va = Vector3.zero</span><br><span class="line"><span class="keyword">local</span> vb = Vector3.one</span><br><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">10000</span> <span class="keyword">do</span></span><br><span class="line">    va = va:Add(vb)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"second time "</span>,x2 - x1,<span class="built_in">tostring</span>(va))</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> va = Vector3.zero</span><br><span class="line"><span class="keyword">local</span> vb = Vector3.one</span><br><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">10000</span> <span class="keyword">do</span></span><br><span class="line">    va.x = va.x + vb.x</span><br><span class="line">    va.y = va.y + vb.y</span><br><span class="line">    va.z = va.z + vb.z</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"third time "</span>,x2 - x1,<span class="built_in">tostring</span>(va))</span><br><span class="line"></span><br><span class="line"><span class="comment">-- number operation &gt; function &gt; Vector3 operation</span></span><br><span class="line"><span class="comment">-- 0 : 0.111199999 : 1.222</span></span><br><span class="line"><span class="comment">-- Vector3 operation 会重新new 一个Vector3的值,调用元方法__add,使用:Add()会改变自身，内存地址不变，里面具体做了什么操作需要自身理解，使用number operation也只改变自身,使用蒙哥的Add方法会发生一些不可描述的错误，暂时没有理解</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><a href="https://github.com/topameng/tolua/blob/master/Assets/ToLua/Lua/UnityEngine/Vector3.lua" target="_blank" rel="noopener">Vector3.lua</a></p>
+<ul>
+<li>2 toLua 中的bit库(这个bit库好像新版本的toLua删除了)<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--位运算</span></span><br><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">Description:</span></span><br><span class="line"><span class="comment">    FileName:bit.lua</span></span><br><span class="line"><span class="comment">    This module provides a selection of bitwise operations.</span></span><br><span class="line"><span class="comment">History:</span></span><br><span class="line"><span class="comment">    Initial version created by  阵雨 2005-11-10.</span></span><br><span class="line"><span class="comment">Notes:</span></span><br><span class="line"><span class="comment">  ....</span></span><br><span class="line"><span class="comment">]]</span></span><br><span class="line"><span class="comment">--[[&#123;2147483648,1073741824,536870912,268435456,134217728,67108864,33554416,16777216,</span></span><br><span class="line"><span class="comment">        8388608,4194304,2097152,1048576,524288,262144,131072,65536,</span></span><br><span class="line"><span class="comment">        16768,16384,8192,4096,2048,1024,512,256,128,64,16,16,8,4,2,1&#125;</span></span><br><span class="line"><span class="comment">        ]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--暂时使用16位来运算，暂时项目中没有超过2^16的值,或者可以使用C库</span></span><br><span class="line">bit=&#123;data16=&#123;&#125;&#125;</span><br><span class="line"><span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">    bit.data16[i]=<span class="number">2</span>^(<span class="number">16</span>-i)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">---d2b 十进制转换为二进制</span></span><br><span class="line"><span class="comment">---@param arg number</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bit:d2b</span><span class="params">(arg)</span></span></span><br><span class="line">    <span class="comment">--todo 这个tr可以使用外部缓存就没有必要每次都创建一个16的table</span></span><br><span class="line">    <span class="keyword">local</span>   tr=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;</span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">arg</span> &gt;= self.data16[i] <span class="keyword">then</span></span><br><span class="line">        tr[i]=<span class="number">1</span></span><br><span class="line">        <span class="built_in">arg</span>=<span class="built_in">arg</span>-self.data16[i]</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        tr[i]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span>   tr</span><br><span class="line"><span class="keyword">end</span>   <span class="comment">--bit:d2b</span></span><br><span class="line"></span><br><span class="line"><span class="comment">---b2d 二进制转为10进制</span></span><br><span class="line"><span class="comment">---@param arg table</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>    <span class="title">bit:b2d</span><span class="params">(arg)</span></span></span><br><span class="line">    <span class="keyword">local</span>   nr=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">arg</span>[i] ==<span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">        nr=nr+<span class="number">2</span>^(<span class="number">16</span>-i)</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span>  nr</span><br><span class="line"><span class="keyword">end</span>   <span class="comment">--bit:b2d</span></span><br><span class="line"></span><br><span class="line"><span class="comment">---_xor 异或操作</span></span><br><span class="line"><span class="comment">---@param a table</span></span><br><span class="line"><span class="comment">---@param b table</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>    <span class="title">bit:_xor</span><span class="params">(a,b)</span></span></span><br><span class="line">    <span class="keyword">local</span>   op1=self:d2b(a)</span><br><span class="line">    <span class="keyword">local</span>   op2=self:d2b(b)</span><br><span class="line">    <span class="keyword">local</span>   r=&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span> op1[i]==op2[i] <span class="keyword">then</span></span><br><span class="line">            r[i]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            r[i]=<span class="number">1</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span>  self:b2d(r)</span><br><span class="line"><span class="keyword">end</span> <span class="comment">--bit:xor</span></span><br><span class="line"></span><br><span class="line"><span class="comment">---_and 与操作</span></span><br><span class="line"><span class="comment">---@param a table</span></span><br><span class="line"><span class="comment">---@param b table</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>    <span class="title">bit:_and</span><span class="params">(a,b)</span></span></span><br><span class="line">    <span class="keyword">local</span>   op1=self:d2b(a)</span><br><span class="line">    <span class="keyword">local</span>   op2=self:d2b(b)</span><br><span class="line">    <span class="keyword">local</span>   r=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span> op1[i]==<span class="number">1</span> <span class="keyword">and</span> op2[i]==<span class="number">1</span>  <span class="keyword">then</span></span><br><span class="line">            r[i]=<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            r[i]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span>  self:b2d(r)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">end</span> <span class="comment">--bit:_and</span></span><br><span class="line"></span><br><span class="line"><span class="comment">---_or 或操作</span></span><br><span class="line"><span class="comment">---@param a table</span></span><br><span class="line"><span class="comment">---@param b table</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>    <span class="title">bit:_or</span><span class="params">(a,b)</span></span></span><br><span class="line">    <span class="keyword">local</span>   op1=self:d2b(a)</span><br><span class="line">    <span class="keyword">local</span>   op2=self:d2b(b)</span><br><span class="line">    <span class="keyword">local</span>   r=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span>  op1[i]==<span class="number">1</span> <span class="keyword">or</span>   op2[i]==<span class="number">1</span>   <span class="keyword">then</span></span><br><span class="line">            r[i]=<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            r[i]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span>  self:b2d(r)</span><br><span class="line"><span class="keyword">end</span> <span class="comment">--bit:_or</span></span><br><span class="line"></span><br><span class="line"><span class="comment">---_not 取反</span></span><br><span class="line"><span class="comment">---@param a table</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>    <span class="title">bit:_not</span><span class="params">(a)</span></span></span><br><span class="line">    <span class="keyword">local</span>   op1=self:d2b(a)</span><br><span class="line">    <span class="keyword">local</span>   r=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span>  op1[i]==<span class="number">1</span>   <span class="keyword">then</span></span><br><span class="line">            r[i]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            r[i]=<span class="number">1</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span>  self:b2d(r)</span><br><span class="line"><span class="keyword">end</span> <span class="comment">--bit:_not</span></span><br><span class="line"></span><br><span class="line"><span class="comment">---_rshift 右移</span></span><br><span class="line"><span class="comment">---@param a table</span></span><br><span class="line"><span class="comment">---@param n table</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>    <span class="title">bit:_rshift</span><span class="params">(a,n)</span></span></span><br><span class="line">    <span class="keyword">local</span>   op1=self:d2b(a)</span><br><span class="line">    <span class="keyword">local</span>   r=self:d2b(<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> n &lt; <span class="number">16</span> <span class="keyword">and</span> n &gt; <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">for</span> i=<span class="number">1</span>,n <span class="keyword">do</span></span><br><span class="line">            <span class="keyword">for</span> i=<span class="number">31</span>,<span class="number">1</span>,<span class="number">-1</span> <span class="keyword">do</span></span><br><span class="line">                op1[i+<span class="number">1</span>]=op1[i]</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            op1[<span class="number">1</span>]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    r=op1</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span>  self:b2d(r)</span><br><span class="line"><span class="keyword">end</span> <span class="comment">--bit:_rshift</span></span><br><span class="line"></span><br><span class="line"><span class="comment">---_lshift 左移</span></span><br><span class="line"><span class="comment">---@param a table</span></span><br><span class="line"><span class="comment">---@param n table</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>    <span class="title">bit:_lshift</span><span class="params">(a,n)</span></span></span><br><span class="line">    <span class="keyword">local</span>   op1=self:d2b(a)</span><br><span class="line">    <span class="keyword">local</span>   r=self:d2b(<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> n &lt; <span class="number">16</span> <span class="keyword">and</span> n &gt; <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">for</span> i=<span class="number">1</span>,n   <span class="keyword">do</span></span><br><span class="line">            <span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">31</span> <span class="keyword">do</span></span><br><span class="line">                op1[i]=op1[i+<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            op1[<span class="number">16</span>]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    r=op1</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span>  self:b2d(r)</span><br><span class="line"><span class="keyword">end</span> <span class="comment">--bit:_lshift</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">---print 二级制输出函数</span></span><br><span class="line"><span class="comment">---@param ta table</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>    <span class="title">bit:print</span><span class="params">(ta)</span></span></span><br><span class="line">    <span class="keyword">local</span>   sr=<span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>,<span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">        sr=sr..ta[i]</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="built_in">print</span>(sr)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -189,95 +222,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/22/tolua中的一些分析/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/22/Unity中的一些小技巧/" class="archive-article-date">
-  	<time datetime="2019-03-22T03:14:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/22/Unity中的一些小技巧/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Unity中的一些小技巧</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/22/Unity中的一些小技巧/">Unity中的一些小技巧</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">unity</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/21/高性能的lua代码/" class="archive-article-date">
-  	<time datetime="2019-03-21T10:05:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/21/高性能的lua代码/">高性能的lua代码</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">lua</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -300,8 +344,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

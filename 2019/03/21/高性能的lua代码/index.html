@@ -9,13 +9,14 @@
   <title>高性能的lua代码 | 司马老师的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="1 变量访问速度 local &amp;gt; upValue &amp;gt; Global 12345678910111213141516171819202122232425262728local x1 = os.clock()for i = 1, 100000 do    local a = 10000    a = a * iendlocal x2 = os.clock()print(&quot;local sp">
+<meta name="keywords" content="lua">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高性能的lua代码">
 <meta property="og:url" content="http://yoursite.com/2019/03/21/高性能的lua代码/index.html">
 <meta property="og:site_name" content="司马老师的blog">
 <meta property="og:description" content="1 变量访问速度 local &amp;gt; upValue &amp;gt; Global 12345678910111213141516171819202122232425262728local x1 = os.clock()for i = 1, 100000 do    local a = 10000    a = a * iendlocal x2 = os.clock()print(&quot;local sp">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-22T01:47:58.359Z">
+<meta property="og:updated_time" content="2019-03-22T03:18:45.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高性能的lua代码">
 <meta name="twitter:description" content="1 变量访问速度 local &amp;gt; upValue &amp;gt; Global 12345678910111213141516171819202122232425262728local x1 = os.clock()for i = 1, 100000 do    local a = 10000    a = a * iendlocal x2 = os.clock()print(&quot;local sp">
@@ -23,7 +24,7 @@
     <link rel="alternative" href="/atom.xml" title="司马老师的blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/assets/img/favicon.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -47,7 +48,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/asset/img/4K HDR.png" class="js-avatar">
+			<img src="/assets/img/4K HDR.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">司马老师</a></h1>
@@ -79,7 +80,7 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+					<a class="github" target="_blank" href="https://github.com/SiMaLaoShi" title="github"><i class="icon-github"></i></a>
 		        
 					<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
 		        
@@ -103,7 +104,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="/asset/img/4K HDR.png" class="js-avatar">
+				<img src="/assets/img/4K HDR.png" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">司马老师</h1>
@@ -120,7 +121,7 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+						<a class="github" target="_blank" href="https://github.com/SiMaLaoShi" title="github"><i class="icon-github"></i></a>
 			        
 						<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
 			        
@@ -183,7 +184,8 @@
 <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">local</span> tb = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">100000</span> <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">table</span>.<span class="built_in">insert</span>(tb,i)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"table.insert time"</span>, x2 - x1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">local</span> tb = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">100000</span> <span class="keyword">do</span></span><br><span class="line">    tb[#tb + <span class="number">1</span>] = i</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"table[#table + 1] time"</span>, x2 - x1)</span><br><span class="line"><span class="comment">--table.insert time	0.013</span></span><br><span class="line"><span class="comment">--table[#table + 1] time	0.009</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>4 预先创建固定长度的table &gt; 动态创建长度的table</p>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">100000</span> <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">local</span> tb = &#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;</span><br><span class="line">    tb[<span class="number">1</span>] = <span class="number">1</span> + i</span><br><span class="line">    tb[<span class="number">2</span>] = <span class="number">2</span> + i</span><br><span class="line">    tb[<span class="number">3</span>] = <span class="number">3</span> + i</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"预先创建固定长度的table time"</span>, x2 - x1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">100000</span> <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">local</span> tb = &#123;&#125;</span><br><span class="line">    tb[<span class="number">1</span>] = <span class="number">1</span> + i</span><br><span class="line">    tb[<span class="number">2</span>] = <span class="number">2</span> + i</span><br><span class="line">    tb[<span class="number">3</span>] = <span class="number">3</span> + i</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"动态创建长度的table"</span>, x2 - x1)</span><br><span class="line"><span class="comment">--预先创建固定长度的table time	0.041</span></span><br><span class="line"><span class="comment">--动态创建长度的table	0.064</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">100000</span> <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">local</span> tb = &#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;</span><br><span class="line">    tb[<span class="number">1</span>] = <span class="number">1</span> + i</span><br><span class="line">    tb[<span class="number">2</span>] = <span class="number">2</span> + i</span><br><span class="line">    tb[<span class="number">3</span>] = <span class="number">3</span> + i</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"预先创建固定长度的table time"</span>, x2 - x1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> x1 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">100000</span> <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">local</span> tb = &#123;&#125;</span><br><span class="line">    tb[<span class="number">1</span>] = <span class="number">1</span> + i</span><br><span class="line">    tb[<span class="number">2</span>] = <span class="number">2</span> + i</span><br><span class="line">    tb[<span class="number">3</span>] = <span class="number">3</span> + i</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> x2 = <span class="built_in">os</span>.<span class="built_in">clock</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"动态创建长度的table"</span>, x2 - x1)</span><br><span class="line"><span class="comment">--预先创建固定长度的table time	0.041</span></span><br><span class="line"><span class="comment">--动态创建长度的table	0.064</span></span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 
       
@@ -214,6 +216,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">lua</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -276,6 +289,20 @@
 </article>
 
   
+<nav id="article-nav">
+  
+    <a href="/2019/03/22/Unity中的一些小技巧/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Unity中的一些小技巧
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -390,6 +417,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">unity</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">lua</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
