@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Excel导lua表工具 | 司马老师的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="###前言    工作需要用到lua表，基于java实现 ####  1  表格结构    第一行：字段名  第二行：策划描述  第三行：数据类型（后面有对应）  第四行：类型含义（策划用）  第五行：导表控制行  第六行：数据默认行（后面会有这行的用法）  导出的表名和文件名是sheet名（支持多个sheet）  导出lua中的结构(优化过的)  InteractionTable.lua">
+  <meta name="description" content="前言 * 工作需要用到lua表，基于java, python实现 Java版    表格结构        第一行：字段名    第二行：策划描述    第三行：数据类型（后面有对应）    第四行：类型含义（策划用）    第五行：导表控制行    第六行：数据默认行（后面会有这行的用法）    导出的表名和文件名是sheet名（支持多个sheet）    导出lua中的结构(优化过的)">
 <meta name="keywords" content="java,lua,工具,excel">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Excel导lua表工具">
 <meta property="og:url" content="http://yoursite.com/2019/03/27/Excel导lua表工具/index.html">
 <meta property="og:site_name" content="司马老师的blog">
-<meta property="og:description" content="###前言    工作需要用到lua表，基于java实现 ####  1  表格结构    第一行：字段名  第二行：策划描述  第三行：数据类型（后面有对应）  第四行：类型含义（策划用）  第五行：导表控制行  第六行：数据默认行（后面会有这行的用法）  导出的表名和文件名是sheet名（支持多个sheet）  导出lua中的结构(优化过的)  InteractionTable.lua">
+<meta property="og:description" content="前言 * 工作需要用到lua表，基于java, python实现 Java版    表格结构        第一行：字段名    第二行：策划描述    第三行：数据类型（后面有对应）    第四行：类型含义（策划用）    第五行：导表控制行    第六行：数据默认行（后面会有这行的用法）    导出的表名和文件名是sheet名（支持多个sheet）    导出lua中的结构(优化过的)">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/03/27/Excel导lua表工具/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/27/Excel导lua表工具/2.png">
-<meta property="og:updated_time" content="2019-03-28T09:29:18.404Z">
+<meta property="og:updated_time" content="2019-10-10T06:17:10.996Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Excel导lua表工具">
-<meta name="twitter:description" content="###前言    工作需要用到lua表，基于java实现 ####  1  表格结构    第一行：字段名  第二行：策划描述  第三行：数据类型（后面有对应）  第四行：类型含义（策划用）  第五行：导表控制行  第六行：数据默认行（后面会有这行的用法）  导出的表名和文件名是sheet名（支持多个sheet）  导出lua中的结构(优化过的)  InteractionTable.lua">
+<meta name="twitter:description" content="前言 * 工作需要用到lua表，基于java, python实现 Java版    表格结构        第一行：字段名    第二行：策划描述    第三行：数据类型（后面有对应）    第四行：类型含义（策划用）    第五行：导表控制行    第六行：数据默认行（后面会有这行的用法）    导出的表名和文件名是sheet名（支持多个sheet）    导出lua中的结构(优化过的)">
 <meta name="twitter:image" content="http://yoursite.com/2019/03/27/Excel导lua表工具/1.png">
   
     <link rel="alternative" href="/atom.xml" title="司马老师的blog" type="application/atom+xml">
@@ -174,14 +174,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###前言<br>    工作需要用到lua表，基于java实现</p>
-<p>####</p>
-<ul>
-<li><p>1<br>  表格结构<br>  <img src="/2019/03/27/Excel导lua表工具/1.png" alt="图片"><br>  第一行：字段名<br>  第二行：策划描述<br>  第三行：数据类型（后面有对应）<br>  第四行：类型含义（策划用）<br>  第五行：导表控制行<br>  第六行：数据默认行（后面会有这行的用法）<br>  导出的表名和文件名是sheet名（支持多个sheet）<br><br>  导出lua中的结构(优化过的)<br><br>  <a href="https://github.com/SiMaLaoShi/ExcelTool/blob/master/InteractionTable.lua" target="_blank" rel="noopener">InteractionTable.lua</a><br>  <img src="/2019/03/27/Excel导lua表工具/2.png" alt="图片"></p>
-<p>  <br><br>  <a href="https://github.com/SiMaLaoShi/ExcelTool" target="_blank" rel="noopener">本文git</a></p>
-</li>
-</ul>
-
+        <p></p><h2>前言</h2><p></p>
+<pre><code>* 工作需要用到lua表，基于java, python实现
+</code></pre><p></p><h3>Java版</h3><br>    表格结构<br>    <img src="/2019/03/27/Excel导lua表工具/1.png" alt="图片"><br>    第一行：字段名<br>    第二行：策划描述<br>    第三行：数据类型（后面有对应）<br>    第四行：类型含义（策划用）<br>    第五行：导表控制行<br>    第六行：数据默认行（后面会有这行的用法）<br>    导出的表名和文件名是sheet名（支持多个sheet）<br><br>    导出lua中的结构(优化过的)<br><br>    <a href="https://github.com/SiMaLaoShi/ExcelTool/blob/master/InteractionTable.lua" target="_blank" rel="noopener">InteractionTable.lua</a><br>    <img src="/2019/03/27/Excel导lua表工具/2.png" alt="图片"><p></p>
+<pre><code>&lt;br&gt;    
+[本文git](https://github.com/SiMaLaoShi/ExcelTool)
+</code></pre>
       
 
       
