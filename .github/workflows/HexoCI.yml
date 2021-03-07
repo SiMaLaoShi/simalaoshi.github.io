@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - hexo
+  # 允许手动执行workflow
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
