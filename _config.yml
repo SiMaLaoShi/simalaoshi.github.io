@@ -74,7 +74,7 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 ##https://github.com/litten/hexo-theme-yilia
-theme: hexo-theme-yilia
+theme: hexo-theme-butterfly-dev
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
