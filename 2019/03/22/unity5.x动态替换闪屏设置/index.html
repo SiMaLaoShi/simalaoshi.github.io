@@ -1,238 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
+extends includes/layout.pug
 
-  
-  <title>unity5.x动态替换闪屏设置 | 司马老师的blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="###前言5.x没有提供设置Splash的接口(可能我没发现，高版本有)####当然你可以用场景来实现闪屏，本文只是针对使用unity自带的生成闪屏.思路:闪屏在unity中设置是在PlayerSetting中，想想这个应该是一个脚本，然后把脚本的数据存贮在二进制文件中，懂unity的都知道拷贝一个工程，只要要拷贝Assets文件夹和ProjectSettings文件夹，那么这个二进制文件应该在这">
-<meta property="og:type" content="article">
-<meta property="og:title" content="unity5.x动态替换闪屏设置">
-<meta property="og:url" content="http://yoursite.com/2019/03/22/unity5.x%E5%8A%A8%E6%80%81%E6%9B%BF%E6%8D%A2%E9%97%AA%E5%B1%8F%E8%AE%BE%E7%BD%AE/index.html">
-<meta property="og:site_name" content="司马老师的blog">
-<meta property="og:description" content="###前言5.x没有提供设置Splash的接口(可能我没发现，高版本有)####当然你可以用场景来实现闪屏，本文只是针对使用unity自带的生成闪屏.思路:闪屏在unity中设置是在PlayerSetting中，想想这个应该是一个脚本，然后把脚本的数据存贮在二进制文件中，懂unity的都知道拷贝一个工程，只要要拷贝Assets文件夹和ProjectSettings文件夹，那么这个二进制文件应该在这">
-<meta property="og:locale">
-<meta property="article:published_time" content="2019-03-22T11:14:39.000Z">
-<meta property="article:modified_time" content="2021-03-07T15:27:31.571Z">
-<meta property="article:author" content="司马老师">
-<meta property="article:tag" content="unity">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="司马老师的blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+block content
+  #post
+    if top_img === false
+      include includes/header/post-info.pug
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+    article#article-container.post-content!=page.content
+    include includes/post/post-copyright.pug
+    .tag_share
+      if (theme.post_meta.post.tags)
+        .post-meta__tag-list
+          each item, index in page.tags.data
+            a(href=url_for(item.path)).post-meta__tags #[=item.name]
+      include includes/third-party/share/index.pug
+        
+    if theme.reward.enable
+      !=partial('includes/post/reward', {}, {cache: true})
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">司马老师的blog</a>
-      </h1>
+    //- ad
+    if theme.ad && theme.ad.post
+      .ads-wrap!=theme.ad.post
+
+    if theme.post_pagination
+      include includes/pagination.pug
+    if theme.related_post && theme.related_post.enable
+      != related_posts(page,site.posts)
+
+    if page.comments !== false && theme.comments && theme.comments.use
+      - var commentsJsLoad = true
+      !=partial('includes/third-party/comments/index', {}, {cache: true})
       
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-unity5.x动态替换闪屏设置" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/22/unity5.x%E5%8A%A8%E6%80%81%E6%9B%BF%E6%8D%A2%E9%97%AA%E5%B1%8F%E8%AE%BE%E7%BD%AE/" class="article-date">
-  <time datetime="2019-03-22T11:14:39.000Z" itemprop="datePublished">2019-03-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      unity5.x动态替换闪屏设置
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###前言5.x没有提供设置Splash的接口(可能我没发现，高版本有)<br>####当然你可以用场景来实现闪屏，本文只是针对使用unity自带的生成闪屏.<br>思路:闪屏在unity中设置是在PlayerSetting中，想想这个应该是一个脚本，然后把脚本的数据存贮在二进制文件中，懂unity的都知道拷贝一个工程，只要要拷贝Assets文件夹和ProjectSettings文件夹，那么这个二进制文件应该在这两个文件夹中，果不其然在ProjectSettings有一个ProjectSettings.asset，应该就是这个了，把他放到unity中试一试看看能不能序列化出来(手动滑稽)，放到unity应该会出一个错.知道他保存在哪里了不就直接把换好的二进制文件替换不就行了吗(直接上代码)。</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SetSplash</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// 实现替换闪屏</span></span><br><span class="line">        <span class="comment">// 先把版本信息保存下来(需要保证第一次的版本是正确的)</span></span><br><span class="line">        <span class="keyword">var</span> buiBundleVersion = PlayerSettings.bundleVersion;</span><br><span class="line">        <span class="keyword">var</span> bundleVersionCode = PlayerSettings.Android.bundleVersionCode;</span><br><span class="line">        <span class="keyword">var</span> buildNumber = PlayerSettings.iOS.buildNumber;</span><br><span class="line">        EditorApplication.SaveAssets();</span><br><span class="line">        AssetDatabase.Refresh();</span><br><span class="line"></span><br><span class="line">        <span class="built_in">string</span> workPath = Environment.CurrentDirectory;</span><br><span class="line">        <span class="comment">// sourcePath是你的ProjectSettings文件保存路径，这里只是针对我们的项目</span></span><br><span class="line">        <span class="built_in">string</span> sourcePath = workPath + <span class="string">&quot;/&quot;</span> + ChannelConfig.CHANNEL_PRJECTSETTINGS_PATH;</span><br><span class="line">        <span class="built_in">string</span> targetPath = workPath + <span class="string">&quot;/ProjectSettings/ProjectSettings.asset&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (File.Exists(targetPath))</span><br><span class="line">        &#123;</span><br><span class="line">            File.Delete(targetPath);</span><br><span class="line">        &#125;</span><br><span class="line">        AssetDatabase.Refresh();</span><br><span class="line">        EditorApplication.SaveAssets();</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            File.Copy(sourcePath, targetPath, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        catch (FileNotFoundException e)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(e);</span><br><span class="line">            <span class="keyword">throw</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        EditorApplication.SaveAssets();</span><br><span class="line">        AssetDatabase.Refresh();</span><br><span class="line">        PlayerSettings.bundleVersion = buiBundleVersion;</span><br><span class="line">        PlayerSettings.Android.bundleVersionCode = bundleVersionCode;</span><br><span class="line">        PlayerSettings.iOS.buildNumber = buildNumber;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>上面的代码应该很简单</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/22/unity5.x%E5%8A%A8%E6%80%81%E6%9B%BF%E6%8D%A2%E9%97%AA%E5%B1%8F%E8%AE%BE%E7%BD%AE/" data-id="cklzb7r1s000n0apk34ivcoln" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/unity/" rel="tag">unity</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2019/03/22/tolua%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%88%86%E6%9E%90/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          tolua中的一些分析
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/03/21/%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84lua%E4%BB%A3%E7%A0%81/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">高性能的lua代码</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/excel/" rel="tag">excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ngui/" rel="tag">ngui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tolua/" rel="tag">tolua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unity/" rel="tag">unity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/excel/" style="font-size: 10px;">excel</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lua/" style="font-size: 20px;">lua</a> <a href="/tags/ngui/" style="font-size: 10px;">ngui</a> <a href="/tags/tolua/" style="font-size: 10px;">tolua</a> <a href="/tags/unity/" style="font-size: 15px;">unity</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2019/03/29/NGUI%E7%B2%92%E5%AD%90%E5%89%AA%E8%A3%81/">NGUI粒子剪裁</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/27/Excel%E5%AF%BClua%E8%A1%A8%E5%B7%A5%E5%85%B7/">Excel导lua表工具</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/25/lua%E4%BD%8D%E8%BF%90%E7%AE%97/">lua位运算</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/22/tolua%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%88%86%E6%9E%90/">tolua中的一些分析</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/22/unity5.x%E5%8A%A8%E6%80%81%E6%9B%BF%E6%8D%A2%E9%97%AA%E5%B1%8F%E8%AE%BE%E7%BD%AE/">unity5.x动态替换闪屏设置</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2021 司马老师<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-  </div>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
-</html>
