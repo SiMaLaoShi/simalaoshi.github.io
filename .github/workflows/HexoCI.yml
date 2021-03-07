@@ -11,10 +11,15 @@ jobs:
     steps:
       - name: 切换分支
         uses: actions/checkout@v2
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
 
-      - name: 安装依赖
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+#       - name: 安装依赖
+#         if: steps.cache.outputs.cache-hit != 'true'
+#         run: npm ci
 
       - name: 清除Hexo
         uses: heowc/action-hexo@main
