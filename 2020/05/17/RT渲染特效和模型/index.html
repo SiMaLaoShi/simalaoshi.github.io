@@ -1,0 +1,181 @@
+<!DOCTYPE html><html data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RT渲染特效和模型的研究 | 司马老师的blog</title><meta name="keywords" content="Unity"><meta name="author" content="司马老师"><meta name="copyright" content="司马老师"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="RT需求项目中我们有用到模型在ui上显示，一般有两种方式一种是直接挂模型，然后通过调整RenderQueue来保证渲染顺序，但是太过复制，没有使用     还有一种就是通过RT渲染到ui上，然后通过ui原生的渲染方式去保证我们渲染队列的正确，多一张RT的内存，我们选用的是rt的方式。 问题问题就是RT在渲染粒子的时候，我们使用的是不带通道的雪花片，在3d场景中通过下面的混合方式达到透明效果，我们的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RT渲染特效和模型的研究">
+<meta property="og:url" content="http://yoursite.com/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="司马老师的blog">
+<meta property="og:description" content="RT需求项目中我们有用到模型在ui上显示，一般有两种方式一种是直接挂模型，然后通过调整RenderQueue来保证渲染顺序，但是太过复制，没有使用     还有一种就是通过RT渲染到ui上，然后通过ui原生的渲染方式去保证我们渲染队列的正确，多一张RT的内存，我们选用的是rt的方式。 问题问题就是RT在渲染粒子的时候，我们使用的是不带通道的雪花片，在3d场景中通过下面的混合方式达到透明效果，我们的">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2020-05-17T22:12:51.000Z">
+<meta property="article:modified_time" content="2021-03-08T10:10:15.814Z">
+<meta property="article:author" content="司马老师">
+<meta property="article:tag" content="Unity">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://yoursite.com/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-03-08 10:10:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/header.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">11</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">司马老师的blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">RT渲染特效和模型的研究</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-05-17T22:12:51.000Z" title="Created 2020-05-17 22:12:51">2020-05-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-03-08T10:10:15.814Z" title="Updated 2021-03-08 10:10:15">2021-03-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="RT"><a href="#RT" class="headerlink" title="RT"></a>RT</h1><h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>项目中我们有用到模型在ui上显示，一般有两种方式一种是直接挂模型，然后通过调整RenderQueue来保证渲染顺序，但是太过复制，没有使用    </p>
+<p>还有一种就是通过RT渲染到ui上，然后通过ui原生的渲染方式去保证我们渲染队列的正确，多一张RT的内存，我们选用的是rt的方式。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>问题就是RT在渲染粒子的时候，我们使用的是不带通道的雪花片，在3d场景中通过下面的混合方式达到透明效果，我们的RT相机一般设置SolidColor模式，颜色全是0</p>
+<p><strong>第一次Alpha Blend</strong></p>
+<p>Particle &amp; Background  ==&gt; RenderTexture    </p>
+<blockquote>
+<p>雪花片背景是黑色的我们要过滤掉黑色，参考滤色公式 ，最终表达为如下</p>
+<blockquote>
+<p>结果色=255－[（255－基色）×（255－混合色）]/255</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Blend OneMinusDstColor One</span><br><span class="line">Blend One OneMinusSrcColor</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> Blend One OneMinusSrcColor</span><br><span class="line"> // 混合公式是滤色，黑色作为透明色</span><br><span class="line">ColorMask RGBA</span><br><span class="line">// Mask保留RGBA</span><br></pre></td></tr></table></figure>
+
+<p><strong>第二次Alpha Blend</strong></p>
+<p>RenderTexture &amp; UI    ==&gt; FinalColor</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Blend SrcAlpha OneMinusSrcAlpha</span><br><span class="line">ColorMask [RGBA]</span><br><span class="line">// Blend SrcAlpha OneMinusAlpha		正常模式（传统透明度混合）</span><br></pre></td></tr></table></figure>
+
+<p>这样会有什么问题呢？？</p>
+<p>第一次我们把正常的模型渲染到RT上,使用默认的UI-Default.shader,我们UI-default的blend公式:</p>
+<p><strong><code>Blend SrcAlpha OneMinusSrcAlpha</code></strong></p>
+<p>如果我们从RT上传过来RawImage的Src带了透明通道是而且alpha为0的话，按照上面这个公式src就没了，就会直接一片空白，直接观察RT就行了下图，我们的RT相机的A通道需要设置为0</p>
+<p><img src="/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/image-20201017153614701.png"></p>
+<p>所以我们需要修改一下混合公式，我们的src（从RT上传过来的只看雪花片）的alpha是为1（ColorMask RGBA），所以我们需要把src原样输出和滤掉黑色，所以不能用默认的混合方式了，所以需要把原来的混合方式改掉，思考一个问题，能不能用我们第一次用的这个</p>
+<p><code>Blend One OneMinusSrcColor</code></p>
+<p>如果只是对我们的雪花片当然是可以，但是假如我们还有其他的东西，通过这个公式会让其他的src变淡，可以自己代入公式试下，试想一下我们是不是只要处理雪花片，而雪花片只需要处理alpha，我们只要把alpha处理掉就行了，我们雪花片的背景的alpha是1还记得吗，那就全给他去掉</p>
+<p><code> Blend One OneMinusSrcAlpha // Premultiplied transparency</code></p>
+<p>这个公式就能去掉src的alpha值，而不影响其他的色值，改下试下，你会发现还不行</p>
+<p><img src="/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/image-20201017171057108.png" alt="image-20201017171057108">，</p>
+<p>先不急观察一下，看下除了雪花片其他背景是透明的，雪花片背景是黑色？？，先不急，先改下雪花片的Shader的ColorMask 为RGB，发现居然正常了，这个是什么情况？？我们用FrameDebug查看渲染雪花片那一帧看下是什么情况，只看a通道发现雪花片本身就不带通道的？？而我们的ColorMask 是RGBA，所以这个a是1，（虽然我们的雪花片的不带通道，但是经过blend后就是dst的通道就是1，然后传递到rt也是1了）传递到RT上这个A就是1，我们再到RawImage上也是带透明通道的，而这个透明是0（和我们刚刚的是反了）这个是因为我们雪花片的shader最后的finalcolor 是黑色而且带了alpha通道，用刚刚我们的那个公式，只要alpha是1就正常了是吧，那就把我们雪花片的shader最后的finalcolor不带通道就好了不是，直接Color Mask RGB 就ok了。</p>
+<p><a href="Blend%E5%85%AC%E5%BC%8F.unitypacka">例子可以参考一下</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/garsonlab/p/10172539.html">UI上使用RenderTexture显示模型+AlphaBlend特效</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.uwa4d.com/archives/Severe_MOBA.html">小米超神的解决方案</a></li>
+<li><a target="_blank" rel="noopener" href="https://answer.uwa4d.com/question/5bec285228a16f55acc394b0">uwa渲染分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/coffeecato/article/details/105018866">半透明特效在RenderTexture上的显示问题</a></li>
+<li><a target="_blank" rel="noopener" href="https://answer.uwa4d.com/question/5c7a42be63826a332ad99778">请问用RenderTexture把模型显示到UI时，模型携带的特效无法正确显示怎么解决</a></li>
+<li><a target="_blank" rel="noopener" href="https://answer.uwa4d.com/question/59d5e6ce7974cff22fd433d8">用Camera展示特效到RenderTexture，修改相机背景透明值，特效也会随着透明问题？</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">司马老师</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://yoursite.com/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/">http://yoursite.com/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/07/02/%E8%87%AA%E7%BC%96%E8%AF%91mono%E7%83%AD%E6%9B%B4%E5%8A%A0%E5%AF%86/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">编译Mono热更</div></div></a></div><div class="next-post pull-right"><a href="/2020/04/05/Profile%E7%9C%9F%E6%9C%BA/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">UnityProfile真机</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2020/04/05/Profile真机/" title="UnityProfile真机"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-05</div><div class="title">UnityProfile真机</div></div></a></div><div><a href="/2021/03/01/RenderDoc和GPA的使用/" title="RenderDoc和GPA调试模拟器"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-01</div><div class="title">RenderDoc和GPA调试模拟器</div></div></a></div><div><a href="/2020/11/23/Unity简单Hook/" title="Unity简单Hook"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-23</div><div class="title">Unity简单Hook</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">司马老师</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">11</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/SiMaLaoShi" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="/1742495214qq@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.zhihu.com/people/byxiao-wei" target="_blank" title="Zhihu"><i class="faz zhihu"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=242863121" target="_blank" title=""><i class="faq qq"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=242863121" target="_blank" title=""><i class="js heartbeat"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=242863121" target="_blank" title=""><i class="we weibo"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=242863121" target="_blank" title=""><i class="wx weixin"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RT"><span class="toc-number">1.</span> <span class="toc-text">RT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82"><span class="toc-number">1.1.</span> <span class="toc-text">需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/03/01/RenderDoc%E5%92%8CGPA%E7%9A%84%E4%BD%BF%E7%94%A8/" title="RenderDoc和GPA调试模拟器"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RenderDoc和GPA调试模拟器"/></a><div class="content"><a class="title" href="/2021/03/01/RenderDoc%E5%92%8CGPA%E7%9A%84%E4%BD%BF%E7%94%A8/" title="RenderDoc和GPA调试模拟器">RenderDoc和GPA调试模拟器</a><time datetime="2021-03-01T20:31:50.000Z" title="Created 2021-03-01 20:31:50">2021-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/11/23/Unity%E7%AE%80%E5%8D%95Hook/" title="Unity简单Hook"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity简单Hook"/></a><div class="content"><a class="title" href="/2020/11/23/Unity%E7%AE%80%E5%8D%95Hook/" title="Unity简单Hook">Unity简单Hook</a><time datetime="2020-11-23T21:27:52.000Z" title="Created 2020-11-23 21:27:52">2020-11-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/07/02/%E8%87%AA%E7%BC%96%E8%AF%91mono%E7%83%AD%E6%9B%B4%E5%8A%A0%E5%AF%86/" title="编译Mono热更"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="编译Mono热更"/></a><div class="content"><a class="title" href="/2020/07/02/%E8%87%AA%E7%BC%96%E8%AF%91mono%E7%83%AD%E6%9B%B4%E5%8A%A0%E5%AF%86/" title="编译Mono热更">编译Mono热更</a><time datetime="2020-07-02T19:27:28.000Z" title="Created 2020-07-02 19:27:28">2020-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/" title="RT渲染特效和模型的研究"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RT渲染特效和模型的研究"/></a><div class="content"><a class="title" href="/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/" title="RT渲染特效和模型的研究">RT渲染特效和模型的研究</a><time datetime="2020-05-17T22:12:51.000Z" title="Created 2020-05-17 22:12:51">2020-05-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/04/05/Profile%E7%9C%9F%E6%9C%BA/" title="UnityProfile真机"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UnityProfile真机"/></a><div class="content"><a class="title" href="/2020/04/05/Profile%E7%9C%9F%E6%9C%BA/" title="UnityProfile真机">UnityProfile真机</a><time datetime="2020-04-05T19:32:55.000Z" title="Created 2020-04-05 19:32:55">2020-04-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 司马老师</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body></html>

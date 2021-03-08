@@ -1,0 +1,173 @@
+<!DOCTYPE html><html data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SVN Hook | 司马老师的blog</title><meta name="keywords" content="lua,svn"><meta name="author" content="司马老师"><meta name="copyright" content="司马老师"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="需求在我们开发游戏，我们之前管理资源的时候，总是遇到不规范提交，比如贴图什么的没有带.meta,代码不是utf-8，什么没加日志，什么之类导致查问题查好久，就想着怎么不然让这些提交，或者提醒他们哪里不规范之类，就想着搞一搞 思路一些资源我们在unity提交到时候，直接通过unity去检查，然后提醒，但是想着美术不用unity怎么办，或者在unity文件夹外面怎么样，等等一些问题，好像坐在svn好一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVN Hook">
+<meta property="og:url" content="http://yoursite.com/2019/04/02/SVNHook/index.html">
+<meta property="og:site_name" content="司马老师的blog">
+<meta property="og:description" content="需求在我们开发游戏，我们之前管理资源的时候，总是遇到不规范提交，比如贴图什么的没有带.meta,代码不是utf-8，什么没加日志，什么之类导致查问题查好久，就想着怎么不然让这些提交，或者提醒他们哪里不规范之类，就想着搞一搞 思路一些资源我们在unity提交到时候，直接通过unity去检查，然后提醒，但是想着美术不用unity怎么办，或者在unity文件夹外面怎么样，等等一些问题，好像坐在svn好一">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2019-04-02T11:21:11.000Z">
+<meta property="article:modified_time" content="2021-03-08T10:10:15.822Z">
+<meta property="article:author" content="司马老师">
+<meta property="article:tag" content="lua">
+<meta property="article:tag" content="svn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://yoursite.com/2019/04/02/SVNHook/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-03-08 10:10:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/header.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">11</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">司马老师的blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SVN Hook</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-04-02T11:21:11.000Z" title="Created 2019-04-02 11:21:11">2019-04-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-03-08T10:10:15.822Z" title="Updated 2021-03-08 10:10:15">2021-03-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>在我们开发游戏，我们之前管理资源的时候，总是遇到不规范提交，比如贴图什么的没有带.meta,代码不是utf-8，什么没加日志，什么之类导致查问题查好久，就想着怎么不然让这些提交，或者提醒他们哪里不规范之类，就想着搞一搞</p>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>一些资源我们在unity提交到时候，直接通过unity去检查，然后提醒，但是想着美术不用unity怎么办，或者在unity文件夹外面怎么样，等等一些问题，好像坐在svn好一点，刚好svn也有 pre-comint, post-comit 等等一些hook，脚本，不熟悉这些是什么东西的可以自行查找资料熟悉一下。推荐小乌龟，安装的时候要勾选命令行行工具。</p>
+<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><p><a target="_blank" rel="noopener" href="https://www.visualsvn.com/server/download/">小乌龟服务端</a></p>
+<p><a target="_blank" rel="noopener" href="https://tortoisesvn.net/index.zh.html">小乌龟客户端</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.python.org/">Python</a></p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>我们用新建一个仓库，或者在原来有仓库找到下面的目录，仓库根目录，有下面几个文件夹，我们进入到hook，先不用关闭</p>
+<p><img src="/2019/04/02/SVNHook/image-20201126203216244.png" alt="image-20201126203216244"></p>
+<p>在svn服务端选到管理Hook选项</p>
+<p><img src="/2019/04/02/SVNHook/image-20201126204106060.png" alt="image-20201126204106060"></p>
+<p>出现这样一个东东，就是我们上面提到的pre,post等等，我们只要用pre就行了，双击</p>
+<p><img src="/2019/04/02/SVNHook/image-20201126204310705.png" alt="image-20201126204310705"></p>
+<p>出来一个这个东西，把下面我的代码复制进去，然后点确定，会在我们的版本库根目录的hook文件夹生成一个pre-commit.cmd，这里是和cmd一样的，有基础的可以自己操作了，后面都是做一些很简单的事情，</p>
+<p>通过python检查提交的问题，然后反馈结果码，svn做处理，就是这个思路。</p>
+<p><img src="/2019/04/02/SVNHook/image-20201126204741900.png" alt="image-20201126204741900"></p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">setlocal</span><br><span class="line"><span class="keyword">set</span> REPOS=%<span class="number">1</span></span><br><span class="line"><span class="keyword">set</span> TXN=%<span class="number">2</span></span><br><span class="line"><span class="keyword">rem</span> 这里设置svnlook的路径</span><br><span class="line"><span class="keyword">set</span> SVNLOOK=<span class="string">&quot;C:\Program Files\TortoiseSVN\bin\svnlook&quot;</span></span><br><span class="line"><span class="keyword">rem</span> 这里设置python的安装路径</span><br><span class="line"><span class="keyword">set</span> PYTHON=<span class="string">&quot;C:\Python38\python.exe&quot;</span></span><br><span class="line"><span class="keyword">rem</span> 预处理脚本的路径</span><br><span class="line"><span class="keyword">set</span> pre-commit=<span class="string">&quot;F:\Documents\utility\hooks\pre-commit.py&quot;</span></span><br><span class="line"><span class="keyword">rem</span> 检查资源文件</span><br><span class="line">%PYTHON% %pre-commit% %REPOS% %TXN%</span><br><span class="line"><span class="keyword">rem</span> 检查日志长度</span><br><span class="line">%SVNLOOK% log <span class="string">&quot;%REPOS%&quot;</span> -t <span class="string">&quot;%TXN%&quot;</span> | findstr <span class="string">&quot;..........&quot;</span> &gt; nul</span><br><span class="line"><span class="keyword">if</span> %errorlevel% gtr <span class="number">0</span> <span class="keyword">goto</span> err</span><br><span class="line"><span class="keyword">exit</span> <span class="number">0</span></span><br><span class="line">:err</span><br><span class="line">echo 提交必须写<span class="number">10</span>个字以上的日志!!!&gt;&amp;<span class="number">2</span></span><br><span class="line"><span class="keyword">exit</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>这里就简单的介绍一些基本的svn命令，怎么获取信息，然后处理，后面的东西就需要自己去做处理了。</p>
+<p><img src="/2019/04/02/SVNHook/Users\szgla\Desktop\Git\Notes\疑难杂症\SVNHook\image-20201126205357846.png" alt="image-20201126205357846"></p>
+<p>如果你安装了svn，可以在cmd直接输入svnlook help 可以查看一些svnlook的一些命令操作，我们主要用这个命令，这里我用的是python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command = <span class="string">&quot;svnlook&quot;</span> + <span class="string">&quot; changed -t &quot;</span> + txn + <span class="string">&quot; &quot;</span> + repo</span><br></pre></td></tr></table></figure>
+
+<p>这里的 txn 和 repo 就是我们在上面的cmd命令里设置的，通过命令行传到python脚本就行了。这个命令是干嘛的呢，这个命令就是我们提交svn里面是增加文件，或者是删除文件和更新文件的列表，我们通过python拿到这个列表，就可以知道是什么操作了。</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> REPOS=%<span class="number">1</span></span><br><span class="line"><span class="keyword">set</span> TXN=%<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>这里还要简单介绍一个几个字符,我这里就是通过这个字符去判断是什么操作，熟练svn的肯定也知道这个是什么操作，不多说了</p>
+<blockquote>
+<p>‘A’ 就是add文件 ‘D’ 就是delete文件 ‘U’就是update文件</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">司马老师</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://yoursite.com/2019/04/02/SVNHook/">http://yoursite.com/2019/04/02/SVNHook/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/lua/">lua</a><a class="post-meta__tags" href="/tags/svn/">svn</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/04/05/Profile%E7%9C%9F%E6%9C%BA/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">UnityProfile真机</div></div></a></div><div class="next-post pull-right"><a href="/2019/03/27/Excel%E5%AF%BClua%E8%A1%A8%E5%B7%A5%E5%85%B7/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Excel导lua表工具</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2019/03/27/Excel导lua表工具/" title="Excel导lua表工具"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-03-27</div><div class="title">Excel导lua表工具</div></div></a></div><div><a href="/2019/03/25/lua位运算/" title="lua位运算"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-03-25</div><div class="title">lua位运算</div></div></a></div><div><a href="/2019/03/22/tolua中的一些分析/" title="tolua中的一些分析"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-03-22</div><div class="title">tolua中的一些分析</div></div></a></div><div><a href="/2019/03/21/高性能的lua代码/" title="高性能的lua代码"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-03-21</div><div class="title">高性能的lua代码</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">司马老师</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">11</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/SiMaLaoShi" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="/1742495214qq@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.zhihu.com/people/byxiao-wei" target="_blank" title="Zhihu"><i class="faz zhihu"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=242863121" target="_blank" title=""><i class="faq qq"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=242863121" target="_blank" title=""><i class="js heartbeat"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=242863121" target="_blank" title=""><i class="we weibo"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=242863121" target="_blank" title=""><i class="wx weixin"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9C%80%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">需求</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">3.</span> <span class="toc-text">工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">实现</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/03/01/RenderDoc%E5%92%8CGPA%E7%9A%84%E4%BD%BF%E7%94%A8/" title="RenderDoc和GPA调试模拟器"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RenderDoc和GPA调试模拟器"/></a><div class="content"><a class="title" href="/2021/03/01/RenderDoc%E5%92%8CGPA%E7%9A%84%E4%BD%BF%E7%94%A8/" title="RenderDoc和GPA调试模拟器">RenderDoc和GPA调试模拟器</a><time datetime="2021-03-01T20:31:50.000Z" title="Created 2021-03-01 20:31:50">2021-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/11/23/Unity%E7%AE%80%E5%8D%95Hook/" title="Unity简单Hook"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity简单Hook"/></a><div class="content"><a class="title" href="/2020/11/23/Unity%E7%AE%80%E5%8D%95Hook/" title="Unity简单Hook">Unity简单Hook</a><time datetime="2020-11-23T21:27:52.000Z" title="Created 2020-11-23 21:27:52">2020-11-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/07/02/%E8%87%AA%E7%BC%96%E8%AF%91mono%E7%83%AD%E6%9B%B4%E5%8A%A0%E5%AF%86/" title="编译Mono热更"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="编译Mono热更"/></a><div class="content"><a class="title" href="/2020/07/02/%E8%87%AA%E7%BC%96%E8%AF%91mono%E7%83%AD%E6%9B%B4%E5%8A%A0%E5%AF%86/" title="编译Mono热更">编译Mono热更</a><time datetime="2020-07-02T19:27:28.000Z" title="Created 2020-07-02 19:27:28">2020-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/" title="RT渲染特效和模型的研究"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RT渲染特效和模型的研究"/></a><div class="content"><a class="title" href="/2020/05/17/RT%E6%B8%B2%E6%9F%93%E7%89%B9%E6%95%88%E5%92%8C%E6%A8%A1%E5%9E%8B/" title="RT渲染特效和模型的研究">RT渲染特效和模型的研究</a><time datetime="2020-05-17T22:12:51.000Z" title="Created 2020-05-17 22:12:51">2020-05-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/04/05/Profile%E7%9C%9F%E6%9C%BA/" title="UnityProfile真机"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UnityProfile真机"/></a><div class="content"><a class="title" href="/2020/04/05/Profile%E7%9C%9F%E6%9C%BA/" title="UnityProfile真机">UnityProfile真机</a><time datetime="2020-04-05T19:32:55.000Z" title="Created 2020-04-05 19:32:55">2020-04-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 司马老师</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body></html>
