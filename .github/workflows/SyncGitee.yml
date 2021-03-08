@@ -1,7 +1,7 @@
 name: Sync
-
-on: page_build
-
+on: 
+  page_build:
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
