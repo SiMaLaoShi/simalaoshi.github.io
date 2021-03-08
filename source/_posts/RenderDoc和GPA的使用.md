@@ -4,6 +4,8 @@ date: 2021-03-01 20:31:50
 tags:
 - Unity
 - 工具
+top_img: https://renderdoc.org/fp/t_screen1.jpg?3
+cover: https://renderdoc.org/fp/logo.svg
 ---
 # 准备工作
 

@@ -3,6 +3,8 @@ title: UnityProfile真机
 date: 2020-04-05 19:32:55
 tags:
 - Unity
+top_img: https://docs.unity.cn/cn/current/uploads/Main/ProfilerWindow2.jpg
+cover: https://www.castify.jp/images/icon-unity.svg
 ---
 # 打包
 

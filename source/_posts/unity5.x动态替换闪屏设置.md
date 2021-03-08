@@ -2,6 +2,7 @@
 title: unity5.x动态替换闪屏设置
 date: 2019-03-22 11:14:39
 tags: unity
+cover: https://www.castify.jp/images/icon-unity.svg
 ---
 ###前言5.x没有提供设置Splash的接口(可能我没发现，高版本有)
 ####当然你可以用场景来实现闪屏，本文只是针对使用unity自带的生成闪屏.

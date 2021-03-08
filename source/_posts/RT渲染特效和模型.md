@@ -3,6 +3,8 @@ title: RT渲染特效和模型的研究
 date: 2020-05-17 22:12:51
 tags:
 - Unity
+top_img: https://renderdoc.org/fp/t_screen1.jpg?3
+cover: https://www.castify.jp/images/icon-unity.svg
 ---
 # RT 
 
