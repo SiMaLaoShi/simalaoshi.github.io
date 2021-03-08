@@ -40,7 +40,7 @@ jobs:
           # 注意替换为你的 GitHub 源仓库地址
           source-repo: https://github.com/SiMaLaoShi/simalaoshi.github.io.git
           # 注意替换为你的 Gitee 目标仓库地址
-          destination-repo: https://gitee.com/simalaoshi/simalaoshi.git
+          destination-repo: git@gitee.com:simalaoshi/simalaoshi.git
 
       - name: 生成GiteePage
         uses: yanglbme/gitee-pages-action@main
