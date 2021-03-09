@@ -26,8 +26,11 @@ archive_dir: archives
 category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
+include: 
+  - ".github/**/*"
+  
 skip_render:
-
+  - ".github/**/*"
 # Writing
 new_post_name: :title.md # File name of new posts
 default_layout: post
@@ -83,8 +86,12 @@ theme: butterfly
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:SiMaLaoShi/simalaoshi.github.io.git
-  branch: master
+  ignore_hidden: false # 添加这个属性值为false
+  repo: 
+    gitee: git@gitee.com:simalaoshi/simalaoshi.git
+    branch: master
+    github: git@github.com:SiMaLaoShi/simalaoshi.github.io.git
+
 live2d:
   enable: true
   scriptFrom: local
