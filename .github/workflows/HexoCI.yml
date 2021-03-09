@@ -57,5 +57,11 @@ jobs:
         uses: yakumioto/serverchan-action@v1
         with:
           key: ${{ secrets.SERVER_KEY }}
-          text: {部署博客和推送到gitee}
-          desp: {博客部署成功}
+          text: "部署博客和推送到gitee"
+          desp: "博客部署成功"
+
+
+
+
+
+
