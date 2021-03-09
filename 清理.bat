@@ -1,0 +1,1 @@
+npx hexo clean

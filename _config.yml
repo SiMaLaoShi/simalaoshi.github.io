@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 司马老师的blog
-subtitle:
+title: 恶霸威的学习之路
+subtitle: 有志者事竟成！
 description:
 keywords:
-author: 司马老师
+author: 恶霸威
 language:
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: https://simalaoshi.gitee.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:

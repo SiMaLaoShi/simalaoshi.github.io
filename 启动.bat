@@ -1,0 +1,2 @@
+npx hexo server
+pause
