@@ -4,9 +4,54 @@ date: 2019-03-22 11:14:39
 tags: unity
 cover: https://www.castify.jp/images/icon-unity.svg
 ---
-###前言5.x没有提供设置Splash的接口(可能我没发现，高版本有)
-####当然你可以用场景来实现闪屏，本文只是针对使用unity自带的生成闪屏.
-思路:闪屏在unity中设置是在PlayerSetting中，想想这个应该是一个脚本，然后把脚本的数据存贮在二进制文件中，懂unity的都知道拷贝一个工程，只要要拷贝Assets文件夹和ProjectSettings文件夹，那么这个二进制文件应该在这两个文件夹中，果不其然在ProjectSettings有一个ProjectSettings.asset，应该就是这个了，把他放到unity中试一试看看能不能序列化出来(手动滑稽)，放到unity应该会出一个错.知道他保存在哪里了不就直接把换好的二进制文件替换不就行了吗(直接上代码)。
+# 方式1（推荐）
+
+直接通过文件拷贝直接覆盖掉我们的源Splash，保证.meta文件不改变就好了，不会丢失引用。
+
+# 方式2（推荐）
+
+这个是我们的重头戏，通过反射来我们的闪屏，反射很强大的
+
+```c#
+static void SetSplashScreen()
+    {
+		//常规代码
+		PlayerSettings.SplashScreen.show = true;
+		PlayerSettings.SplashScreen.backgroundColor = Color.white;
+		PlayerSettings.SplashScreen.drawMode = PlayerSettings.SplashScreen.DrawMode.AllSequential;
+		PlayerSettings.SplashScreen.showUnityLogo = false;
+
+		var tex = AssetDatabase.LoadAssetAtPath<Texture>(EditorGUIUtility.systemCopyBuffer);
+		var obj = typeof(PlayerSettings);
+		var method = obj.GetMethod("FindProperty", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+		
+		var property = method.Invoke(obj, new object[] { "androidSplashScreen" }) as SerializedProperty;
+		property.serializedObject.Update();
+		property.objectReferenceValue = tex;
+		property.serializedObject.ApplyModifiedProperties();
+
+		property = method.Invoke(obj, new object[] { "iOSLaunchScreenPortrait" }) as SerializedProperty;
+		property.serializedObject.Update();
+		property.objectReferenceValue = tex;
+		property.serializedObject.ApplyModifiedProperties();
+
+		property = method.Invoke(obj, new object[] { "iOSLaunchScreenLandscape" }) as SerializedProperty;
+		property.serializedObject.Update();
+		property.objectReferenceValue = tex;
+		property.serializedObject.ApplyModifiedProperties();
+
+		AssetDatabase.SaveAssets();
+		AssetDatabase.Refresh();
+	}
+```
+
+
+
+# 方式3（不推荐）
+
+
+思路:闪屏在unity中设置是在PlayerSetting中，想想这个应该是一个脚本，然后把脚本的数据存贮在二进制文件中，懂unity的都知道拷贝一个工程，只要要拷贝Assets文件夹和ProjectSettings文件夹，那么这个二进制文件应该在这两个文件夹中，果不其然在ProjectSettings有一个ProjectSettings.asset，应该就是这个了，把他放到unity中试一试看看能不能序列化出来(手动滑稽)，放到unity应该会出一个错.知道他保存在哪里了不就直接把换好的二进制文件替换不就行了吗(直接上代码)。这个只是针对我们的多渠道不同配置可以这样干。
+
 ```Csharp
 private static void SetSplash()
     {
