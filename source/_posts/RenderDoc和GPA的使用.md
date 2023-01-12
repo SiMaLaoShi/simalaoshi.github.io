@@ -122,3 +122,11 @@ F12来一下
 ![image-20210304182535615](image-20210304182535615.png)
 
 ![image-20210304182813450](image-20210304182813450.png)
+
+# 注意事项
+
+- Intel GPA的Auto-detect选项需要关闭BIOS的安全自动选项
+
+# 官网文档链接
+
+[Intel GPA的官网链接](https://www.intel.com/content/www/us/en/develop/documentation/gpa-user-guide/top.html)
